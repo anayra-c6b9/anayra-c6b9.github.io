@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Simplex Algorithm</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://kit.fontawesome.com/bd0b7c6b8a.js" crossorigin="anonymous"></script>        <style>
+            .container{
+                width: 35%;
+                background-color: rgba(240, 240, 240, 0.6);
+                border-radius: 20px;
+                box-shadow: -8px 8px 2px rgba(212, 209, 209, 0.6);
+                text-align: center;
+                margin: 100px auto 0px auto;
+                padding: 15px 0px 15px 0px;
+            }
+            .topicTitle{
+                color: rgb(255, 255, 255);
+                font-size: 5em;
+                line-height: 0.9em;
+                font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+                font-weight: 1000;
+                
+            }
+            .prompt{
+                color:  rgb(255, 255, 255);
+                font-size: 1.3em;
+                font-weight: 400;
+                margin: 20px auto;
+            }
+            .operationType>div{
+                width: 40%;
+                display: inline-block;
+                background-color: rgba(219, 219, 219, 0.3);
+                border-radius: 10px;
+                padding-top: 20px;
+                border-style: solid;
+                border: 0px;
+                border-bottom: 5px;
+                border-left: 5px;
+                border-color: rgba(219, 219, 219, 1);
+            }
+            #less{
+                margin-right: 2%;
+            }
+            #greater{
+                margin-left: 2%;
+            }
+            .txt{
+                color:  rgb(255, 255, 255);
+                font-size: 1.5em;
+                font-weight: 500;
+            }
+            #le, #ge{
+                color:  rgb(255, 255, 255);
+                font-size: 4em;
+                font-weight: 800;
+            }
+            .footer{
+                border-radius: 10px;
+                margin-top: 100px;
+                background-color: rgba(54, 28, 70, 0.7);
+                text-align: center;
+                color: white;
+                padding: 20px;
+
+            }
+            #linked, #mail, .line{
+                margin-left: 10px;
+            }
+            a:link{
+                color: coral;
+            }
+            a:hover{
+                color: chocolate;
+            }
+            a:visited{
+                color: lightgreen;
+            }
+            a:active{
+                color: lightgreen;
+            }
+            #less:hover, #greater:hover{
+                box-shadow: -5px 5px gray;
+                border-style: solid;
+                border-color: gray;
+                border-width: 5px 5px 5px 5px;
+                border-top-color:rgba(219, 219, 219, 0.05);
+                border-right-color:rgba(219, 219, 219, 0.05);
+                
+            }
+
+        </style>
+    </head>
+    <body background="images/doodle2.jpg" style="padding: 0px; margin: 0px">
+        <div class="container">
+            <div class="topicTitle">SIMPLEX</div>
+            <div class="topicTitle">ALGO.</div>
+            <div class="prompt">
+                <span>Choose the type of operation</span>
+            </div>
+            <div class="operationType">
+                <div id="less" onclick="window.location.href='pages/lesser.html'">
+                    <span class="txt">Less than Equal to</span>
+                    <div><span id="le">&#8804;</span></div>
+                </div>
+                <div id="greater" onclick="window.location.href='pages/greater.html'">
+                    <span class="txt">Greater than Equal to</span>
+                    <div><span id="ge">&#8805;</span></div>
+                </div>
+            </div>
+        </div>
+        <footer>
+        <div class="footer">
+            <span>Created by Aryan Gurung</span><br><span>Powered by Evil Corp©</span>
+            <br><hr><br>
+            <span>Connect on : <span>
+            <span id="linked"><i class="fa-brands fa-linkedin"></i> <a href="https://www.linkedin.com/in/aryan-gurung-4b10b6220" target="_blank" rel="noreffer noopener">Linked In</a></span>
+            <span class="line">|</span>
+            <span id="mail"><i class="fa-solid fa-envelope"></i> <a href="mailto:solowolo236@gmail.com">G-Mail</a></span>
+            <span class="line">|</span>
+            <span class="line">Donate on : </span><span class="line"><i class="fa-brands fa-google-pay" style="font-size: 1.5em; padding-right: 10px;"></i><a href="javascript:;">G-pay</a></span>
+        </div>
+        </footer>
+    </body>
+</html>
