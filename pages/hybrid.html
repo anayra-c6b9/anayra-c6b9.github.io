@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>simplex problem</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://kit.fontawesome.com/bd0b7c6b8a.js" crossorigin="anonymous"></script>
+        <style>
+            #insertValuesDiv{text-align: center; background-color: aqua; margin : 20px auto;}
+            #insertValuesDiv div{padding: 10px 0px 10px 0px;}
+            #insertStandardDiv{text-align: center; background-color: lightgreen; margin: 20px auto; padding: 10px;}
+            #readerDiv{margin: 10px auto;}
+            #startButton{visibility: hidden; margin: 10px auto;}
+            #tableDiv{text-align: left; background-color: lightpink;}
+            #tableDiv td{width: 40px; border: 1px solid black;}
+            #resultDiv{margin: 10px auto; padding: 20px auto; background-color: lavender;}
+            #equationType{margin-top: 10px;}
+        </style>
+    </head>
+    <body>
+        <header style="text-align: left;">
+            <div style="display: inline-block; font-size: 3em; padding-left: 20px;">
+                <a href="../index.html"><i class="fa-solid fa-house"></i></a>
+            </div>
+            <div style="display: inline-block; font-size: 4em; padding-left: 100px;">
+                Greater Than type problems
+            </div>
+        </header>
+        <div id="insertValuesDiv">
+            <div id="colDiv">
+                <span>Insert number of variables: </span>
+                <input id="col" type="text">
+            </div>
+            <div id="rowDiv">
+                <span>Insert number of constrains : </span>
+                <input type="text" id="row">
+            </div>
+            <div id="ProblemTypeDiv">
+                <label for="operationType">Select the type of operation : </label>
+                <select name="problem" id="operationType">
+                    <option value="max">Maximize</option>
+                    <option value="min">Minimize</option>
+                </select>
+                <br>
+                <label for="equationType">Select the type of equation : </label>
+                <select name="problem" id="equationType">
+                    <option value="hybrid">Hybrid</option>
+                </select>
+            </div>
+            <div>
+                <input type="button" id="createButton" value="Create">
+            </div>
+        </div>
+
+        <div id="insertStandardDiv">
+           <div id="readerDiv"></div>
+           <div id="startButtonDiv"><input type="button" value="Start" id="startButton"></div>
+        </div>
+
+        <div id="tableDiv">
+
+        </div>
+
+        <div id="resultDiv">
+
+        </div>
+        
+        <script src="../js/hybrid.js" async defer></script>
+    </body>
+</html>

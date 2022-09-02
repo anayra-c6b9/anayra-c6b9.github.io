@@ -86,7 +86,7 @@ async function computeVariable(row, col){
     for(var index=0; index<minimumRatio.length; index++)
     {
         var ratio=bMatrix[index][0]/bMatrix[index][lowestz+1];
-        if(ratio>0 && ratio!=Infinity)
+        if(ratio>=0 && ratio!=Infinity && bMatrix[index][lowestz+1]>0)
         {
             minimumRatio[index]=ratio;
         } else
@@ -136,6 +136,8 @@ async function computeVariable(row, col){
 async function terminateSys(){
     col=Number(document.getElementById('col').value);
     var resultDiv=document.getElementById('resultDiv');
+    var ANSWER=0;
+
     resultDiv.innerHTML+=`<br>The solution for the given Maximization problem is :<br>`;
 
     for(var i=1; i<=col; i++)
@@ -145,14 +147,15 @@ async function terminateSys(){
         {
             if(i===BMatrix[j][2])
             {
-                resultDiv.innerHTML+=`<span>x<sub>${BMatrix[j][2]}</sub> : ${bMatrix[j][0]}</span><br>`;
+                resultDiv.innerHTML+=`<span>x<sub>${BMatrix[j][2]}</sub> : ${bMatrix[j][0].toFixed(2)}</span><br>`;
+                ANSWER+=Number(document.getElementById(`c${i-1}`).value)*bMatrix[j][0];
                 flag=1;
             }
         }
         if(flag===0)
-            resultDiv.innerHTML+=`<span>x<sub>${i}</sub> : 0</span><br>`; 
-        
+            resultDiv.innerHTML+=`<span>x<sub>${i}</sub> : 0</span><br>`;
     }
+    resultDiv.innerHTML+=`<br>z : ${ANSWER.toFixed(2)}<br>`;
 }
 
 function displayMatrix(){
@@ -260,12 +263,15 @@ async function createMatrix(row, col){
     //cMatrix
     for(var i=0; i<cMatrix.length; i++)
     {
-        cMatrix[i]=Number(document.getElementById(`c${i}`).value);
+        if(i<col)
+            cMatrix[i]=Number(document.getElementById(`c${i}`).value);
+        else if(i>=col)
+            cMatrix[i]=0;
     }
 
     //bMatrix
     for(var i=0; i<row; i++)
-    for(var j=0; j<row+col+1; j++)
+    for(var j=0; j<col+1; j++)
     {
         if(j==0)
         {
@@ -289,6 +295,15 @@ async function createMatrix(row, col){
                 idMatrix[i][j]=0;
         }
     }
+
+    //initializing other values of bMatrix
+    for(var i=0; i<row; i++)
+    for(var j=col+1; j<col+1+row; j++)
+    {
+        bMatrix[i][j]=idMatrix[i][j-col-1];
+    }
+
+    console.log(bMatrix);
 
     //BMatrix
     var count=0;
@@ -373,7 +388,7 @@ async function createTable(){
         var col=Number(document.getElementById('col').value);
         var row=Number(document.getElementById('row').value);
         insertValuesDiv.innerHTML='';
-        insertValuesDiv.innerHTML+=`<br>Surplus Variables : `;
+        insertValuesDiv.innerHTML+=`<br>Slack Variables : `;
         for(var i=col+1;i<=col+row; i++)
             insertValuesDiv.innerHTML+=`x<sub>${i}</sub> `;
         insertValuesDiv.innerHTML+=`<br>`;
@@ -382,9 +397,9 @@ async function createTable(){
         {
             var equationRow=`<div style="text-align: center;">`;
             var equationCol=``;
-            for(var colindex=0; colindex<row+col+1; colindex++)
+            for(var colindex=0; colindex<col+1; colindex++)
             {
-                if(colindex==(row+col))
+                if(colindex==(col))
                     {equationCol+=`<span>b<sub>${rowindex+1} : </sub></span><input type='text' id='b${rowindex}' style="width: 40px; margin-right: 10px">`;}
                 else
                     equationCol+=`<span>a<sub>${rowindex+1}${colindex+1} : </sub></span><input type='text' id='val${rowindex}${colindex+1}' style="width: 40px; margin-right: 10px">`;
@@ -394,7 +409,7 @@ async function createTable(){
         }
 
         var zvalRow=`<div style="text-align: center; padding-top: 10px;"><span>z = </span>`;
-        for(var colindex=0; colindex<row+col; colindex++)
+        for(var colindex=0; colindex<col; colindex++)
         {
             zvalRow+=`<span>c<sub>${colindex+1}</sub> : </span><input type='text' id='c${colindex}' style="width: 40px; margin-right: 10px">`;
         }

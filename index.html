@@ -57,7 +57,7 @@
                 font-size: 1.5em;
                 font-weight: 500;
             }
-            #le, #ge{
+            #le, #ge, #hy{
                 color:  rgb(255, 255, 255);
                 font-size: 4em;
                 font-weight: 800;
@@ -86,7 +86,7 @@
             a:active{
                 color: lightgreen;
             }
-            #less:hover, #greater:hover{
+            #less:hover, #greater:hover, #hybrid:hover{
                 box-shadow: -5px 5px gray;
                 border-style: solid;
                 border-color: gray;
@@ -94,6 +94,10 @@
                 border-top-color:rgba(219, 219, 219, 0.05);
                 border-right-color:rgba(219, 219, 219, 0.05);
                 
+            }
+            #hybrid{
+                width: 60%;
+                margin-top: 20px;
             }
 
         </style>
@@ -113,6 +117,10 @@
                 <div id="greater" onclick="window.location.href='pages/greater.html'">
                     <span class="txt">Greater/Equal</span>
                     <div><span id="ge">&#8805;</span></div>
+                </div>
+                <div id="hybrid" onclick="window.location.href='pages/hybrid.html'">
+                    <span class="txt">Hybrid</span>
+                    <div><span id="hy">&#8804; &#8805; &#61;</span></div>
                 </div>
             </div>
         </div>

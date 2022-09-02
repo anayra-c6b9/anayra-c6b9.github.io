@@ -1,9 +1,10 @@
+//declaring all matrices
 let cMatrix;
 let BMatrix;
 let bMatrix;
 let zMatrix;
-let minimumRatio;
-let max_val;                    //max val initiated by greater.js
+let oMatrix;
+let minimumratio;
 
 async function updateMatrix(outgoing, incoming, keyElement){
     
@@ -155,7 +156,7 @@ async function terminateSys(){
     var resultDiv=document.getElementById('resultDiv');
     var ANSWER=0;
 
-    resultDiv.innerHTML+=`<br>The solution for the given `;
+    resultDiv.innerHTML+=`<br>The solution for the given `
     if(operationType==='max')
         resultDiv.innerHTML+='Maximization';
     else
@@ -175,7 +176,7 @@ async function terminateSys(){
             }
         }
         if(flag===0)
-            resultDiv.innerHTML+=`<span>x<sub>${i}</sub> : 0</span><br>`;
+            resultDiv.innerHTML+=`<span>x<sub>${i}</sub> : 0</span><br>`; 
     }
     resultDiv.innerHTML+=`<br>z : ${ANSWER.toFixed(2)}<br>`;
 }
@@ -281,29 +282,71 @@ function displayMatrix(){
     tableDiv.innerHTML+=zMatrixHtml;
 }
 
-async function createMatrix(row, col){
-    //cMatrix
-    for(var i=0; i<cMatrix.length; i++)
-    {
-        if(i<col)
-            cMatrix[i]=Number(document.getElementById(`c${i}`).value);
-        else if(i>=col && i<col+row)
-            cMatrix[i]=0;
-        else
-            cMatrix[i]=Number(document.getElementById('max_val').value);
-    }
+async function createMatrix(row, col, geeq){
 
-    //bMatrix
-    for(var i=0; i<bMatrix.length; i++)
-    for(var j=0; j<col+1; j++)
+    //number of ge or eq constraints
+    var spConstaints=geeq;
+    // initializing values in cMatrix
+    var cAdd=row;
+    for(var i=0; i<col; i++)
     {
-        if(j==0)
+        if(oMatrix[i]===-1)
         {
-            bMatrix[i][j]=Number(document.getElementById(`b${i}`).value);
+            cMatrix[i]=Number(document.getElementById(`c${i}`).value);
         }
-        else
+        else if(oMatrix[i]===1)
         {
-            bMatrix[i][j]=Number(document.getElementById(`val${i}${j}`).value);
+            cMatrix[i]=Number(document.getElementById(`c${i}`).value);
+            if(document.getElementById('operationType').value==='min')
+                cMatrix[cMatrix.length-spConstaints]=Number(document.getElementById(`max_val`).value);
+            else if(document.getElementById('operationType').value==='max')
+                cMatrix[cMatrix.length-spConstaints]=Number(document.getElementById(`max_val`).value)*(-1);
+            spConstaints--;
+        }
+        else if(oMatrix[i]===0)
+        {
+            cMatrix[i]=Number(document.getElementById(`c${i}`).value);
+            if(document.getElementById('operationType').value==='min')
+                cMatrix[cMatrix.length-spConstaints]=Number(document.getElementById(`max_val`).value);
+            else if(document.getElementById('operationType').value==='max')
+                cMatrix[cMatrix.length-spConstaints]=Number(document.getElementById(`max_val`).value)*(-1);
+            spConstaints--
+        }
+    }
+    console.log(cMatrix.length);
+
+    //initializing values in bMatrix
+    //flag for additional variable input
+    var bFlag=0;
+    //number of ge or eq constraints for artificial variables
+    spConstaints=geeq;
+    for(var i=0; i<row; i++)
+    {
+        for(var j=0; j<col+1; j++)
+        {
+            if(j===0)
+            {
+                bMatrix[i][j]=Number(document.getElementById(`b${i}`).value);
+            }
+            else
+            {
+                bMatrix[i][j]=Number(document.getElementById(`val${i}${j}`).value);
+            }
+        }
+        if(oMatrix[i]===-1)
+        {
+            bMatrix[i][col+i+1]=1;
+        }
+        else if(oMatrix[i]===0)
+        {
+            bMatrix[i][bMatrix[i].length-spConstaints]=1;
+            spConstaints--;
+        }
+        else if(oMatrix[i]===1)
+        {
+            bMatrix[i][col+i+1]=-1;
+            bMatrix[i][bMatrix[i].length-spConstaints]=1;
+            spConstaints--;
         }
     }
 
@@ -320,47 +363,31 @@ async function createMatrix(row, col){
         }
     }
 
-    //filling up the rest of bMatrix
-    for(var i=0; i<bMatrix.length; i++)
-    for(var j=col+1; j<col+1+row; j++)
-    {
-        bMatrix[i][j]=(idMatrix[i][j-col-1])*(-1);
-    }
-    for(var i=0; i<bMatrix.length; i++)
-    for(var j=row+col+1; j<col+1+2*row; j++)
-    {
-        bMatrix[i][j]=idMatrix[i][j-row-col-1]*1;
-    }
-
-    console.log(bMatrix);
-
-    //BMatrix
-    var count=0;
-    var check=0;
-    var flag=-1;
+    //checking for the presence of identity matrix in the bMatrix
+    var icount=0;
+    var ocount=0;
     var store=[];
 
-    for(var j=1; j<bMatrix[0].length; j++)
+    for(var x=0; x<row; x++)
     {
-        check=0;
-        for(var i=0; i<bMatrix.length; i++)
+        for(var j=1; j<bMatrix[0].length; j++)
         {
-            if(bMatrix[i][j]===idMatrix[i][count])
-                check++;
-        }
-        if(check===bMatrix.length)
-        {
-            store.push(j);
-            count++;
-        }    
-        if(count===idMatrix.length)
-        {
-            flag=0;
-            break;
+            icount=0;
+            for(var i=0; i<bMatrix.length; i++)
+            {
+                if(bMatrix[i][j]===idMatrix[i][x])
+                    icount++;
+            }
+            if(icount===row)
+            {
+                ocount++;
+                store.push(j);
+            }
         }
     }
 
-    if(flag===-1)
+
+    if(ocount!=row)
     {
         alert(`Hey! it looks like we can't make an identity matrix out of the table`);
         window.location.reload();
@@ -391,6 +418,7 @@ async function createMatrix(row, col){
         zMatrix[i]=z_j-cMatrix[i];
     }
 
+    console.log(bMatrix);
     displayMatrix();
     checkCompletion(row, col);
 }
@@ -399,41 +427,77 @@ async function declareMatrix(){
     var col=Number(document.getElementById('col').value);
     var row=Number(document.getElementById('row').value);
 
-    cMatrix=new Array(col+2*row);
+    //declaring the oMatrix
+    oMatrix=new Array(row);
+    //calculating ge or eq constrains
+    var geeq=0;
+    //calculating the additional variables
+    additionalVar=0;
+    for(var i=0; i<row; i++)
+    {
+        if(document.getElementById(`operator${i}`).value==='greater')
+            {
+                additionalVar+=2;
+                oMatrix[i]=1;
+                geeq++;
+            }  
+        else if(document.getElementById(`operator${i}`).value==='less')
+            {
+                additionalVar++;
+                oMatrix[i]=-1;
+            }
+        else
+            {
+                additionalVar++;
+                oMatrix[i]=0;
+                geeq++;
+            }
+    }
+
+    //declaring the cMatrix
+    cMatrix=new Array(col+additionalVar).fill(0);
+    console.log(cMatrix.length);
+    //declaring the BMatrix
     BMatrix=Array(row).fill().map(()=>Array(3));
-    bMatrix=Array(row).fill().map(()=>Array(col+2*row+1));
-    zMatrix=new Array(col+2*row);
+    //declaring the bMatrix
+    bMatrix=Array(row).fill().map(()=>Array(col+additionalVar+1).fill(0));
+    //declaring the zMatrix
+    zMatrix=new Array(col+additionalVar);
+    //declaring the minimumRatio
     minimumRatio=new Array(row);
 
-    createMatrix(row, col);
+
+    createMatrix(row, col, geeq);
 }
 
 async function createTable(){
     var equationType=document.getElementById('equationType').value;
     console.log(equationType);
-    if(equationType==='greater')
+    if(equationType==='hybrid')
     {
         var insertValuesDiv=document.getElementById('readerDiv');
         var col=Number(document.getElementById('col').value);
         var row=Number(document.getElementById('row').value);
+
+        //taking max value from its user
         insertValuesDiv.innerHTML='';
         insertValuesDiv.innerHTML=`<div><span>Enter the max value (M): </span><input type='text' id='max_val' style="width: 40px; margin-right: 10px"></div>`;
-        insertValuesDiv.innerHTML+=`<br>Surplus Variables : `;
-        for(var i=col+1;i<=col+row; i++)
-            insertValuesDiv.innerHTML+=`x<sub>${i}</sub> `;
-        insertValuesDiv.innerHTML+=`<br>Artificial Variables : `;
-        for(var i=col+row+1; i<=col+2*row; i++)
-            insertValuesDiv.innerHTML+=`x<sub>${i}</sub> `;
-        insertValuesDiv.innerHTML+=`<br>`;
 
+        //prototyping the equations
         for(var rowindex=0; rowindex<row; rowindex++)
         {
             var equationRow=`<div style="text-align: center;">`;
             var equationCol=``;
-            for(var colindex=0; colindex<col+1; colindex++)
+            for(var colindex=0; colindex<col+2; colindex++)
             {
-                if(colindex==(col))
+                if(colindex==(col+1))
                     {equationCol+=`<span>b<sub>${rowindex+1} : </sub></span><input type='text' id='b${rowindex}' style="width: 40px; margin-right: 10px">`;}
+                else if(colindex==col)
+                    equationCol+=`<span><select name="operation" id='operator${rowindex}'>
+                    <option value="less">&#8804;</option>
+                    <option value="greater">&#8805;</option>
+                    <option value="greater">&#61;</option>
+                    </select></span>`;
                 else
                     equationCol+=`<span>a<sub>${rowindex+1}${colindex+1} : </sub></span><input type='text' id='val${rowindex}${colindex+1}' style="width: 40px; margin-right: 10px">`;
             }
@@ -441,6 +505,7 @@ async function createTable(){
             insertValuesDiv.innerHTML+=equationRow;
         }
 
+        //prototyping the operation function
         var zvalRow=`<div style="text-align: center; padding-top: 10px;"><span>z = </span>`;
         for(var colindex=0; colindex<col; colindex++)
         {
